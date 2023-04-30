@@ -14,18 +14,18 @@ import org.w3c.dom.Text
 
 class FinalAdapter(
     private val list: List<MainActivity.Info>,
-//    private val listener : (Int) -> Unit
+   private val listener : (Int) -> Unit
 ): RecyclerView.Adapter<FinalAdapter.FinalViewHolder>() {
 
     class FinalViewHolder(
         val binding: ItemviewBinding,
-//        private val listener: (Int) -> Unit
+       private val listener: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root){
         fun settingData(model: ViewModel){
             binding.txtTitle.text = model.toString()
-//            binding.root.setOnClickListener{
-//                listener.invoke(position)
-//            }
+           binding.root.setOnClickListener{
+               listener.invoke(position)
+           }
         }
     }
 
