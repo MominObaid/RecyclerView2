@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
             Info("User 10", "You may have a new message"),
             Info("User 11", "You may have a new message")
         ), listener = {
+                Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show()
 
         })
         MainList.layoutManager = LinearLayoutManager(this)
