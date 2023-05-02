@@ -7,19 +7,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-
-//    private var binding : ActivityMainBinding? = null
+private lateinit var binding : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)   
+        setContentView(binding.root)
 
-//        val ItemList : List<String> = listOf("aaaa", "bbbb", "cccc", "dddd", "eeeee" , "ffff", "ggggg")
-//        val mainList = findViewById<RecyclerView>(R.id.itemList)
-//        mainList.adapter = MainAdapter(this, ItemList, ItemListDscptn)
-//        mainList.layoutManager = LinearLayoutManager(this)
-
-        val MainList = findViewById<RecyclerView>(R.id.itemList)
+        val MainList = binding.itemList
         MainList.layoutManager = LinearLayoutManager(this)
 
         val newVal = listOf<Info>(
@@ -36,8 +31,8 @@ class MainActivity : AppCompatActivity() {
             Info("User 11", "You may have a new message")
         )
         MainList.adapter = FinalAdapter( newVal, listener = {
-            newVal.get(it).Title
-            Toast.makeText(this, "${newVal.get(it).Title} Clicked", Toast.LENGTH_SHORT).show()
+            val title = newVal.get(it).Title
+            Toast.makeText(this, "$title Clicked", Toast.LENGTH_SHORT).show()
         })
 
     }
@@ -45,8 +40,5 @@ class MainActivity : AppCompatActivity() {
   class Info(
         val Title : String = "",
         val Description : String = "",
-//        val ImageV : ImageView
-
-
     )
 }
