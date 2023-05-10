@@ -42,9 +42,9 @@ class MainActivity : AppCompatActivity() {
         addToList.setOnClickListener {
             Toast.makeText(this, "Opening Second activity", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, SecondActivity::class.java)
-            val mainModel = title
-            val position =
-            intent.putExtra("model", mainModel)
+//             val mainModel = title
+//             val position =   
+            intent.putExtra("model", mainModel)     //TODO unclear
             intent.putExtra("position", position)
             startActivityForResult(intent, EDIT_USER_REQ_CODE)
         }
