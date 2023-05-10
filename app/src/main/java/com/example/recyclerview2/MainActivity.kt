@@ -1,52 +1,83 @@
 package com.example.recyclerview2
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.recyclerview2.databinding.ActivityMainBinding
+
+var EDIT_USER_REQ_CODE = 100
+var ADD_USER_REQ_CODE = 200
 
 class MainActivity : AppCompatActivity() {
-
-//    private var binding : ActivityMainBinding? = null
-
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: FinalAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-//        val ItemList : List<String> = listOf("aaaa", "bbbb", "cccc", "dddd", "eeeee" , "ffff", "ggggg")
-//        val mainList = findViewById<RecyclerView>(R.id.itemList)
-//        mainList.adapter = MainAdapter(this, ItemList, ItemListDscptn)
-//        mainList.layoutManager = LinearLayoutManager(this)
-
-        val MainList = findViewById<RecyclerView>(R.id.itemList)
-        MainList.layoutManager = LinearLayoutManager(this)
-
-        val newVal = listOf<Info>(
-            Info("User 1" , "You may have a new message"),
-            Info("User 2", "You may have a new message"),
-            Info("User 3", "You may have a new message"),
-            Info("User 4", "You may have a new message"),
-            Info("User 5", "You may have a new message"),
-            Info("User 6", "You may have a new message"),
-            Info("User 7", "You may have a new message"),
-            Info("User 8", "You may have a new message"),
-            Info("User 9", "You may have a new message"),
-            Info("User 10", "You may have a new message"),
-            Info("User 11", "You may have a new message")
-        )
-        MainList.adapter = FinalAdapter( newVal, listener = {
-            newVal.get(it).Title
-            Toast.makeText(this, "${newVal.get(it).Title} Clicked", Toast.LENGTH_SHORT).show()
-        })
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initRV()
     }
 
-  class Info(
-        val Title : String = "",
-        val Description : String = "",
-//        val ImageV : ImageView
+    private fun initRV() {
+        val MainList = binding.itemList
+        binding.itemList.layoutManager = LinearLayoutManager(this)
+        MainList.adapter = FinalAdapter(newList,
+
+            listener = {
+                val title = newList.get(it).Title
+                Toast.makeText(this, "$title is Clicked", Toast.LENGTH_SHORT).show()
 
 
+            },
+            listener2 = {
+                var check = newList.get(it).checked
+                Toast.makeText(this, "${check} ${title} is Checked", Toast.LENGTH_SHORT).show()
+            })
+        val addToList = binding.floatBtn
+        addToList.setOnClickListener {
+            Toast.makeText(this, "Opening Second activity", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, SecondActivity::class.java)
+            val mainModel = title
+            val position =
+            intent.putExtra("model", mainModel)
+            intent.putExtra("position", position)
+            startActivityForResult(intent, EDIT_USER_REQ_CODE)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ADD_USER_REQ_CODE && resultCode == RESULT_OK){
+            val model = data?.getParcelableExtra<itemList>("model")
+            newList.add(model!!)
+            adapter.notifyDataSetChanged()
+        }
+        if (requestCode == EDIT_USER_REQ_CODE && resultCode == RESULT_OK){
+            val position = data?.getIntExtra("position", -1) ?: -1
+            val model = data?.getParcelableExtra<itemList>("model")
+
+            if (model != null)
+                newList.set(position, model)
+            adapter.notifyDataSetChanged()
+        }
+    }
+    val newList = mutableListOf<itemList>(
+        itemList("User 1", "You may have a new message", false),
+        itemList("User 2", "You may have a new message", false),
+        itemList("User 3", "You may have a new message", false),
+        itemList("User 4", "You may have a new message", false),
+        itemList("User 5", "You may have a new message", false),
+        itemList("User 6", "You may have a new message", false),
+        itemList("User 7", "You may have a new message", false),
+        itemList("User 8", "You may have a new message", false),
+        itemList("User 9", "You may have a new message", false),
+        itemList("User 10", "You may have a new message", false),
+        itemList("User 11", "You may have a new message", false),
+        itemList("User 12", "You may have a new message", false)
     )
 }
