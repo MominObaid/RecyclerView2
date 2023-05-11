@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.example.recyclerview2.databinding.ActivitySecondBinding
 
 class SecondActivity : AppCompatActivity() {
-    private lateinit var binding : ActivitySecondBinding
+    private lateinit var binding: ActivitySecondBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySecondBinding.inflate(layoutInflater)
@@ -15,20 +15,24 @@ class SecondActivity : AppCompatActivity() {
         val addTitle = binding.etTitle
         val addDescription = binding.etDescription
         val addBtn = binding.btnAdd
-        val model : itemList? = intent?.getParcelableExtra("model")
-        addTitle.setText(model?.Title ?: "")
-        addDescription.setText(model?.Description ?: "")
+        val model: itemList? = intent?.getParcelableExtra("model")
+//        addTitle.setText(model?.Title ?: "")
+//        addDescription.setText(model?.Description ?: "")
+
+        val titleData = intent.getStringExtra("newTitle")
+        addTitle.setText(model?.Title ?: titleData)
+        val desData = intent.getStringExtra("newDescrip")
+        addDescription.setText(desData)
 
         addBtn.text = if (model != null)
             "Update"
-        else
-            "Add"
+        else "Add"
 
         val position = intent?.getIntExtra("position", -1)
-        addBtn.setOnClickListener{
+        addBtn.setOnClickListener {
             val fileTitle = addTitle.text.toString()
             val fileDescrip = addDescription.text.toString()
-            val itemModel = if (model == null ) itemList() else model
+            val itemModel = if (model == null) itemList() else model
             itemModel.Title = fileTitle
             itemModel.Description = fileDescrip
 

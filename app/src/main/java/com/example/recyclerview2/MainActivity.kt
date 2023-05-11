@@ -10,9 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recyclerview2.databinding.ActivityMainBinding
 
-var EDIT_USER_REQ_CODE = 100
-var ADD_USER_REQ_CODE = 200
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: FinalAdapter
@@ -22,6 +19,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initRV()
     }
+    companion object{
+        var EDIT_USER_REQ_CODE = 100
+        var ADD_USER_REQ_CODE = 200
+    }
 
     private fun initRV() {
         val MainList = binding.itemList
@@ -30,20 +31,25 @@ class MainActivity : AppCompatActivity() {
 
             listener = {
                 val title = newList.get(it).Title
+                val description = newList.get(it).Description
                 Toast.makeText(this, "$title is Clicked", Toast.LENGTH_SHORT).show()
-
+                val newIntent = Intent(this, SecondActivity::class.java)
+                newIntent.putExtra("newTitle", title)
+                newIntent.putExtra("newDescrip", description)
+                startActivityForResult(newIntent, EDIT_USER_REQ_CODE)
 
             },
             listener2 = {
-                var check = newList.get(it).checked
-                Toast.makeText(this, "${check} ${title} is Checked", Toast.LENGTH_SHORT).show()
+                val check = newList.get(it).checked
+                Toast.makeText(this, "$check $title is Checked", Toast.LENGTH_SHORT).show()
             })
+
         val addToList = binding.floatBtn
         addToList.setOnClickListener {
             Toast.makeText(this, "Opening Second activity", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, SecondActivity::class.java)
-            val mainModel = title
-            val position =
+            val mainModel = intent.getStringExtra("model")
+            val position = intent.getIntExtra("position", -1)
             intent.putExtra("model", mainModel)
             intent.putExtra("position", position)
             startActivityForResult(intent, EDIT_USER_REQ_CODE)
@@ -63,7 +69,9 @@ class MainActivity : AppCompatActivity() {
 
             if (model != null)
                 newList.set(position, model)
-            adapter.notifyDataSetChanged()
+//            setResult(ADD_USER_REQ_CODE , data)
+//            finish()
+            adapter.notifyItemChanged(position)
         }
     }
     val newList = mutableListOf<itemList>(
