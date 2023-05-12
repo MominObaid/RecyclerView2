@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
             if (model != null)
                 newList.set(position, model)
 //            setResult(ADD_USER_REQ_CODE , data)
-//            finish()
             adapter.notifyItemChanged(position)
         }
     }
