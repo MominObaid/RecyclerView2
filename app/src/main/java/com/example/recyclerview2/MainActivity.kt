@@ -7,6 +7,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recyclerview2.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import retrofit2.Response
+import retrofit2.await
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -16,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRV()
+        getRepo()
     }
     companion object {
         var EDIT_USER_REQ_CODE = 100
@@ -52,6 +59,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("model", mainModel)
             intent.putExtra("position", position)
             startActivityForResult(intent, EDIT_USER_REQ_CODE)
+            adapter.submitList(newList)
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -69,6 +77,7 @@ class MainActivity : AppCompatActivity() {
                 newList.set(position, model)
             adapter.notifyItemChanged(position)
         }
+        adapter.submitList(newList)
     }
     val newList = mutableListOf<itemList>(
         itemList("User 1", "You may have a new message",  false),
@@ -84,4 +93,12 @@ class MainActivity : AppCompatActivity() {
         itemList("User 11", "You may have a new message", false),
         itemList("User 12", "You may have a new message", false)
     )
+    private fun getRepo(){
+        val repo = MyRetrofitObj.myRetrofit.getRepos()
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = repo.isExecuted
+            if (result != null)
+                Log.d("Obi ", "running")
+        }
+    }
 }

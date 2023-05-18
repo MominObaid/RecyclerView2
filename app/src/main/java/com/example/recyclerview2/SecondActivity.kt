@@ -21,30 +21,30 @@ class SecondActivity : AppCompatActivity() {
         val model: itemList? = intent?.getParcelableExtra("model")
         val titleData = intent.getStringExtra("editTitle")
         val desData = intent.getStringExtra("editDescrip")
-        addTitle.setText (model?.Title ?: titleData)
-        addDescription.setText(model?.Description?: desData)
+        addTitle.setText(model?.Title ?: titleData)
+        addDescription.setText(model?.Description ?: desData)
 
         addBtn.text = if (model != null)
-            "Update" else "Add"
+                "Update" else "Add"
 
-//        val titleData = intent.getStringExtra("newTitle")
+//            val titleData = intent.getStringExtra("editTitle")
 //        addTitle.setText(titleData)
-//        val desData = intent.getStringExtra("newDescrip")
+//        val desData = intent.getStringExtra("editDescrip")
 //        addDescription.setText(desData)
 
-        val position = intent.getIntExtra("position", -1)
-        addBtn.setOnClickListener {
-            val fileTitle = addTitle.text.toString()
-            val fileDescrip = addDescription.text.toString()
-            val itemModel = if (model == null) itemList() else model
-            itemModel.Title = fileTitle
-            itemModel.Description = fileDescrip
+            val position = intent.getIntExtra("position", -1)
+            addBtn.setOnClickListener {
+                val fileTitle = addTitle.text.toString()
+                val fileDescrip = addDescription.text.toString()
+                val itemModel = if (model == null) itemList() else model
+                itemModel.Title = fileTitle
+                itemModel.Description = fileDescrip
 
-            val intent = Intent()
-            intent.putExtra("model", itemModel)
-            intent.putExtra("position", position)
-            setResult(RESULT_OK, intent)
-            finish()
+                val intent = Intent()
+                intent.putExtra("model", itemModel)
+                intent.putExtra("position", position)
+                setResult(RESULT_OK, intent)
+                finish()
+            }
         }
     }
-}
