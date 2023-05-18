@@ -5,9 +5,9 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class itemList(
-    var Title : String,
+    var Title: String,
     var Description: String,
-    var checked : Boolean
-) : Parcelable {
-    constructor() : this ("", "", false)
+    var checked: Boolean
+    ) : Parcelable {
+    constructor() : this ("", "",  false )
 }

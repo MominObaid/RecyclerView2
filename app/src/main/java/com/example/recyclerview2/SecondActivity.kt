@@ -3,6 +3,8 @@ package com.example.recyclerview2
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Adapter
+import android.widget.TextView
 import com.example.recyclerview2.databinding.ActivitySecondBinding
 
 class SecondActivity : AppCompatActivity() {
@@ -15,20 +17,22 @@ class SecondActivity : AppCompatActivity() {
         val addTitle = binding.etTitle
         val addDescription = binding.etDescription
         val addBtn = binding.btnAdd
-        val model: itemList? = intent?.getParcelableExtra("model")
-//        addTitle.setText(model?.Title ?: "")
-//        addDescription.setText(model?.Description ?: "")
 
-        val titleData = intent.getStringExtra("newTitle")
-        addTitle.setText(model?.Title ?: titleData)
-        val desData = intent.getStringExtra("newDescrip")
-        addDescription.setText(desData)
+        val model: itemList? = intent?.getParcelableExtra("model")
+        val titleData = intent.getStringExtra("editTitle")
+        val desData = intent.getStringExtra("editDescrip")
+        addTitle.setText (model?.Title ?: titleData)
+        addDescription.setText(model?.Description?: desData)
 
         addBtn.text = if (model != null)
-            "Update"
-        else "Add"
+            "Update" else "Add"
 
-        val position = intent?.getIntExtra("position", -1)
+//        val titleData = intent.getStringExtra("newTitle")
+//        addTitle.setText(titleData)
+//        val desData = intent.getStringExtra("newDescrip")
+//        addDescription.setText(desData)
+
+        val position = intent.getIntExtra("position", -1)
         addBtn.setOnClickListener {
             val fileTitle = addTitle.text.toString()
             val fileDescrip = addDescription.text.toString()
