@@ -1,10 +1,9 @@
 package com.example.recyclerview2
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Adapter
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.recyclerview2.databinding.ActivitySecondBinding
 
 class SecondActivity : AppCompatActivity() {
@@ -16,35 +15,30 @@ class SecondActivity : AppCompatActivity() {
 
         val addTitle = binding.etTitle
         val addDescription = binding.etDescription
+        Glide.with(binding.ivEdit).load(
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcx6ujIsNIbVvB929ruxl5Hnd8i304r-3JNJY_rojDNQ&s")
+            .into(binding.ivEdit)
         val addBtn = binding.btnAdd
-
         val model: itemList? = intent?.getParcelableExtra("model")
-        val titleData = intent.getStringExtra("editTitle")
-        val desData = intent.getStringExtra("editDescrip")
-        addTitle.setText(model?.Title ?: titleData)
-        addDescription.setText(model?.Description ?: desData)
+        addTitle.setText(model?.Title ?: "")
+        addDescription.setText(model?.Description ?: "")
 
         addBtn.text = if (model != null)
-                "Update" else "Add"
+            "Update" else "Add"
 
-//            val titleData = intent.getStringExtra("editTitle")
-//        addTitle.setText(titleData)
-//        val desData = intent.getStringExtra("editDescrip")
-//        addDescription.setText(desData)
+        val position = intent.getIntExtra("position", -1)
+        addBtn.setOnClickListener {
+            val fileTitle: String = addTitle.text.toString()
+            val fileDescrip: String = addDescription.text.toString()
+            val itemModel = if (model == null) itemList() else model
+            itemModel.Title = fileTitle
+            itemModel.Description = fileDescrip
 
-            val position = intent.getIntExtra("position", -1)
-            addBtn.setOnClickListener {
-                val fileTitle = addTitle.text.toString()
-                val fileDescrip = addDescription.text.toString()
-                val itemModel = if (model == null) itemList() else model
-                itemModel.Title = fileTitle
-                itemModel.Description = fileDescrip
-
-                val intent = Intent()
-                intent.putExtra("model", itemModel)
-                intent.putExtra("position", position)
-                setResult(RESULT_OK, intent)
-                finish()
-            }
+            val intent = Intent()
+            intent.putExtra("model", itemModel)
+            intent.putExtra("position", position)
+            setResult(RESULT_OK, intent)
+            finish()
         }
     }
+}

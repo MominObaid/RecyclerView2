@@ -1,7 +1,7 @@
 package com.example.recyclerview2
 
 
-interface listener {
+interface Listener {
     fun onItemClick()
     fun onCheckBoxClick()
 }
