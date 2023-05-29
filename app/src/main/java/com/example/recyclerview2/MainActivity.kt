@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         }, checkListener = {
 //                val check2 =  newList.get().Title
 //                Log.d("Obi", "Checked listener $check")
-        }, list = newList)
+        })
         mainAdapter.adapter = adapter
         adapter.submitList(newList.toMutableList())
 
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             val position = intent.getIntExtra("position", -1)
             intent.putExtra("model", mainModel)
             intent.putExtra("position", position)
-            startActivityForResult(intent, EDIT_USER_REQ_CODE)
+            startActivityForResult(intent, ADD_USER_REQ_CODE)
             adapter.submitList(newList.toMutableList())
         }
     }
@@ -66,11 +66,12 @@ class MainActivity : AppCompatActivity() {
 
         }
         if (requestCode == EDIT_USER_REQ_CODE && resultCode == RESULT_OK) {
-            val position = data?.getIntExtra("position", -1) ?: -1
-            val model = data?.getParcelableExtra<itemList>("model")
+            val position = data?.getIntExtra("position", 1)?: 1
+            val model = data?.getParcelableExtra<itemList?>("model")
 
-            if (model != null)
-                newList.set(position, model)
+            if (model != null) {
+                newList.set(position,model)
+            }
             adapter.submitList(newList.toMutableList())
         }
     }

@@ -22,7 +22,7 @@ class myDiffUtil : DiffUtil.ItemCallback<Any>() {
 }
 
 class MainAdapter(
-    val list: MutableList<Any>,
+//    val list: MutableList<Any>,
     private val itemListener: (Int) -> Unit,
     private val checkListener: (Boolean) -> Unit,
 ) : ListAdapter<Any, ViewHolder>(myDiffUtil()) {
@@ -79,19 +79,22 @@ class MainAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
          if(holder is ItemViewHolder) {
-            holder.bindItem(list.get(position)as itemList)
+            holder.bindItem(getItem(position)as itemList)
         }else if (holder is AdViewHolder)
-            holder.bindAd(list.get(position)as itemList2)
+            holder.bindAd(getItem(position)as itemList2)
     }
 
     override fun getItemViewType(position: Int): Int {
-        val lists = list[position]
+        val lists = getItem(position)
         return when (lists){
             is itemList -> ITEM_VIEW
             else -> AD_VIEW
         }
+//       if (position is ){
+//           return
+//        }
     }
-    override fun getItemCount(): Int {
-        return list.size
-    }
+//    override fun getItemCount(): Int {
+//        return list.size
+//    }
 }
