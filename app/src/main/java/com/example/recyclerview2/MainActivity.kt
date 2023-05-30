@@ -2,20 +2,41 @@ package com.example.recyclerview2
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recyclerview2.databinding.ActivityMainBinding
+import com.example.recyclerview2.databinding.ItemviewBinding
+import retrofit2.create
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: MainAdapter
+    lateinit var githubViewModel: GithubViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRV()
-        GithubViewModel()
+        observer()
+    }
+
+    fun observer() {
+        val githubApiObj = GithubApiObj.getInstance().create(GithubApi::class.java)
+        val repository = GithubRepository(githubApiObj)
+        githubViewModel = ViewModelProvider(
+            this, GithubViewModel.GithubViewModelFactory(repository))
+            .get(GithubViewModel::class.java)
+
+        githubViewModel.users.observe(this) {
+            Log.d("Obi", it.toString())
+        }
     }
 
     companion object {
@@ -30,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         adapter = MainAdapter(itemListener = {
             val title = newList.get(it)
 //            val description = newList.get(it).Description
-                Toast.makeText(this, "$title is Clicked", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "$title is Clicked", Toast.LENGTH_SHORT).show()
             val newintent = Intent(this, SecondActivity::class.java)
             newintent.putExtra("model", newList.get(it) as itemList) //replaced with newList.get(it)
             newintent.putExtra("position", it)
@@ -66,15 +87,17 @@ class MainActivity : AppCompatActivity() {
 
         }
         if (requestCode == EDIT_USER_REQ_CODE && resultCode == RESULT_OK) {
-            val position = data?.getIntExtra("position", 1)?: 1
+            val position = data?.getIntExtra("position", 1) ?: 1
             val model = data?.getParcelableExtra<itemList?>("model")
 
             if (model != null) {
-                newList.set(position,model)
+                newList.set(position, model)
+//                newList.removeAt(position)
             }
             adapter.submitList(newList.toMutableList())
         }
     }
+
     val newList = mutableListOf<Any>(
         itemList("User", "Details"),
         itemList("User 1", "You may have a new message"),
@@ -104,4 +127,13 @@ class MainActivity : AppCompatActivity() {
         itemList("User 20", "You may have a new message"),
         itemList("User 21", "You may have a new message")
     )
+//
+//    override fun onItemClick(onClickListener: Unit) {
+//    }
+//
+//    override fun onCheckBoxClick() {
+//        TODO("Not yet implemented")
+//    }
 }
+//token 29-5-23 :
+// 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

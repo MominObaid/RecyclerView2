@@ -1,34 +1,50 @@
 package com.example.recyclerview2
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class GithubViewModel() : ViewModel() {
+class GithubViewModel(private val githubRepository: GithubRepository) : ViewModel() {
 
-//
-//   init {
-//        getGithubUsers()
-//    }
-    val usersList: LiveData<List<GithubUser>> = MutableLiveData<List<GithubUser>>()
+   init {
+       viewModelScope.launch {
+           githubRepository.getUsers()
+//           getGithubUsers()
+       }
+    }
 
-     fun getGithubUsers() {
-        val githubApiObj = GithubApiObj.getInstance()
-        val service = githubApiObj.create(GithubApi::class.java)
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = service.getUsers() //unnececary
-            val result = response.body()
-            if (result != null)
-                Log.d("Obi","VM Running")
+    val users : LiveData<GithubUser>
+    get() = githubRepository.usersList
 
-//            val result = githubApiObj.getUsers()
-//            if (result != null)
-//            Log.d("Obi",result.body().toString())
-                Log.d("Obi", "Running")
+    class GithubViewModelFactory(private val repository: GithubRepository): ViewModelProvider.Factory{
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return GithubViewModel(repository) as T
         }
     }
+//    override fun <T: ViewModel?> create(modelClass: Class<T>):T{
+
+//    }
+//    val usersList: LiveData<List<GithubUser>> = MutableLiveData<List<GithubUser>>()
+//    private val _usersList = MutableLiveData<List<GithubUser>>()
+//    val usersList : LiveData<List<GithubUser>>
+//    get() = _usersList
+//
+//    suspend fun getUsers(){
+//        val result = GithubApi.getUsers()
+//        _usersList.postValue(result.body())
+//    }
+//     fun getGithubUsers() {
+//        val githubApiObj = GithubApiObj.getInstance()
+//        val service = githubApiObj.create(GithubApi::class.java)
+//        viewModelScope.launch {
+////            val response = service.getUsers()
+////            val result = response.body()
+////            if (result != null)
+////                _usersList.value
+////            _usersList.postValue()
+//                Log.d("Obi", "Running")
+//        }
+//    }
 }

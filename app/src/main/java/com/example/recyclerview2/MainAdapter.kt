@@ -2,6 +2,7 @@ package com.example.recyclerview2
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -25,25 +26,33 @@ class MainAdapter(
 //    val list: MutableList<Any>,
     private val itemListener: (Int) -> Unit,
     private val checkListener: (Boolean) -> Unit,
+//    private val listener : Listener
 ) : ListAdapter<Any, ViewHolder>(myDiffUtil()) {
 
     inner class ItemViewHolder(
         val binding: ItemviewBinding,
         private val itemListener: (Int) -> Unit,
         private val checkListener: (Boolean) -> Unit,
+//        private val listener: Listener
     ) : ViewHolder(binding.root) {
 
         fun bindItem(model: itemList) {
             Glide.with(binding.ivIcon).load(model.item_image).into(binding.ivIcon)
             binding.tvTitle.text = model.Title
             binding.tvDescription.text = model.Description
+
+//            binding.tvTitle.setOnClickListener{
+//                @Override fun onItemClick(onClickListener: OnClickListener){
+//                }
+//            }
+
             binding.root.setOnClickListener {
                 itemListener.invoke(position)
             }
             binding.cbChecked.isChecked = model.checked
             binding.cbChecked.setOnCheckedChangeListener { buttonView, isChecked ->
                 val msg = if (isChecked) "Checked" else "Unchecked"
-                Log.d("Obi", "$msg")
+                Log.d("Obi", "$msg" )
 //                Toast.makeText(this, "${msg}", Toast.LENGTH_SHORT).show()
             }
         }
@@ -90,9 +99,6 @@ class MainAdapter(
             is itemList -> ITEM_VIEW
             else -> AD_VIEW
         }
-//       if (position is ){
-//           return
-//        }
     }
 //    override fun getItemCount(): Int {
 //        return list.size
