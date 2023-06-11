@@ -11,7 +11,7 @@ class GithubViewModel(private val githubRepository: GithubRepository) : ViewMode
    init {
        viewModelScope.launch {
            githubRepository.getUsers()
-//           getGithubUsers()
+           
        }
     }
 
