@@ -33,6 +33,9 @@ private lateinit var binding : ActivityMainBinding
         MainList.adapter = FinalAdapter( newVal, listener = {
             val title = newVal.get(it).Title
             Toast.makeText(this, "$title Clicked", Toast.LENGTH_SHORT).show()
+        ), listener = {
+                Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show()
+
         })
 
     }

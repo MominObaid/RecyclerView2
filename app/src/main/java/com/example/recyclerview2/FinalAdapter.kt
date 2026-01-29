@@ -22,6 +22,13 @@ class FinalAdapter(
             binding.root.setOnClickListener{
                 listener.invoke(position)
             }
+       private val listener: (Int) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root){
+        fun settingData(model: ViewModel){
+            binding.txtTitle.text = model.toString()
+           binding.root.setOnClickListener{
+               listener.invoke(position)
+           }
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FinalViewHolder {
